@@ -1,5 +1,5 @@
-from urllib import response
 from app import db
+from flask import make_response, jsonify
 from models.connections import ConnectionsClass, delete_connections_for_category
 
 
@@ -26,20 +26,19 @@ def get_category_from_name(categoryname):
 def delete_category(categoryname):
     removedCategory = get_category_from_name(categoryname)
     if removedCategory:
-
         db.session.delete(removedCategory)
         db.session.commit()
         delete_connections_for_category(categoryname)
-        return "success"
-    return "failure"
+        return make_response(jsonify(msg="Category deleted successfully"),200)
+    return make_response(jsonify(msg="Category doesn't seem to exist"),400)
 
 
 def add_category(categoryname):
     if not get_category_from_name(categoryname):
         db.session.add(CategoriesClass(categoryname=categoryname))
         db.session.commit()
-        return {"msg":"Category created"}
-    return {"msg":"This category already exists"}
+        return make_response(jsonify(msg="Category created"),200)
+    return make_response(jsonify(msg="This category already exists"),400)
 
 
 def change_category(categoryname, newname):
@@ -47,6 +46,6 @@ def change_category(categoryname, newname):
     if changedCategory:
         changedCategory.categoryname=newname
         db.session.commit()
-        return {"msg":"Category name changed"}
-    return {"msg":"This category doesn't exist"}
+        return make_response(jsonify(msg="Category name changed"),200)
+    return make_response(jsonify(msg="This category doesn't exist"),400)
 

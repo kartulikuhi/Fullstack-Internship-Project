@@ -1,3 +1,4 @@
+from flask import jsonify
 from app import db
 from models.connections import *
 from models.categories import *
@@ -10,8 +11,10 @@ class PostsClass(db.Model):
     def __repr__(self):
         return '<PostsClass %r>' % self.blogPost
 
+
 def query_all_posts():
     return PostsClass.query.all()
+
 
 def get_post_from_id(postID):
     return PostsClass.query.filter(PostsClass.id==postID).first()
@@ -34,7 +37,7 @@ def add_post(blogdata, categories=[]):
             create_connection(categoryID,new_post.id)
     
     db.session.commit()
-    return {"msg":"Post created"}
+    return jsonify(msg="Post created")
 
 
 def delete_post(postID):
@@ -43,7 +46,7 @@ def delete_post(postID):
     db.session.commit()
     delete_connections_for_post(postID)
 
-    return {"msg":"Post successfully deleted"}
+    return jsonify(msg="Post successfully deleted")
 
 
 def change_post(newdata, postID, categories):
@@ -69,6 +72,6 @@ def change_post(newdata, postID, categories):
             db.session.delete(verify_connection(category, postID))
         db.session.commit()
 
-        return {"msg":"Post successfully changed"}
+        return jsonify(msg="Post successfully changed")
 
-    return {"msg":"this post does not seem to exist"}
+    return jsonify(msg="this post does not seem to exist")
