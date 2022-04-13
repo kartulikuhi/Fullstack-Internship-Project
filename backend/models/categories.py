@@ -1,4 +1,3 @@
-from os import remove
 from app import db
 from flask import make_response, jsonify
 from models.connections import ConnectionsClass, delete_connections_for_category

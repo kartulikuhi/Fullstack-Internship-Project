@@ -1,9 +1,9 @@
 
 <template>
   <div>
-    <div type="container">
+    <div class="container">
       <div class="box" v-for="post in data.posts" :key="post.id">
-      <router-link  :to="'/'+ this.category + '/' + post.id">{{ post.post_data }}  </router-link>
+      <router-link  :to="'/'+ this.category + '/' + post.id">{{ post.blogpost }}  </router-link>
       </div>
     </div>
   </div>
@@ -16,19 +16,22 @@ export default {
   data () {
     return {
       data: [],
+      categorypath: '',
       category: ''
+
     }
   },
   methods: {
     getReponse () {
       const path = 'http://localhost:5000/'
-      console.log(this.$route.params.categoryname)
       if (this.$route.params.categoryname === undefined) {
+        this.categorypath = 'posts'
         this.category = 'posts'
       } else {
-        this.category = 'categories/' + this.$route.params.categoryname
+        this.categorypath = 'categories/' + this.$route.params.categoryname
+        this.category = this.$route.params.categoryname
       }
-      axios.get(path + this.category)
+      axios.get(path + this.categorypath)
         .then(function (response) {
           console.log(response.data)
           this.data = response.data
