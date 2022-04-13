@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import AllCategories from '../components/categories.vue'
 import SingleCategory from '../components/category.vue'
 import BlogPosts from '../components/posts.vue'
@@ -7,7 +6,8 @@ const routes = [
   {
     path: '/posts',
     name: 'posts',
-    component: HomeView
+    component: SingleCategory,
+    categoryname: 'posts'
   },
   {
     path: '/about',

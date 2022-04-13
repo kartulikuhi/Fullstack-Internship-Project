@@ -1,3 +1,4 @@
+from os import remove
 from app import db
 from flask import make_response, jsonify
 from models.connections import ConnectionsClass, delete_connections_for_category
@@ -28,7 +29,7 @@ def delete_category(categoryname):
     if removedCategory:
         db.session.delete(removedCategory)
         db.session.commit()
-        delete_connections_for_category(categoryname)
+        delete_connections_for_category(removedCategory.id)
         return make_response(jsonify(msg="Category deleted successfully"),200)
     return make_response(jsonify(msg="Category doesn't seem to exist"),400)
 

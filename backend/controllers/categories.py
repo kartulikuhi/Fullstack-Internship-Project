@@ -41,8 +41,9 @@ def remove_category(name):
 def change_category(name):
 
     if request.is_json:
-        print()
-        return alter_category(name, request.get_json()["categoryname"])
+        newname = request.get_json()["categoryname"]
+        if newname != '' and len(newname) < 16 and newname.isalpha() and " " not in newname:
+            return alter_category(name, newname)
     return make_response(jsonify(msg="Request data wasn't in application/json"),400)
     
 
