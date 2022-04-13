@@ -29,7 +29,7 @@ def delete_connections_for_post(postID):
     db.session.commit()
 
 
-def delete_connections_for_category(categoryname):
-    for category in ConnectionsClass.query.filter(ConnectionsClass.categoryname==categoryname).all():
+def delete_connections_for_category(categoryID):
+    for category in ConnectionsClass.query.filter(ConnectionsClass.categoryID==categoryID).all():
         db.session.delete(category)
     db.session.commit()

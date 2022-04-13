@@ -41,16 +41,22 @@ export default {
     },
     PostCategory (PostEvent) {
       const path = 'http://localhost:5000/categories'
-      axios.post(path, { categoryname: PostEvent.target.elements.new_category.value })
-      location.reload()
+      const newname = PostEvent.target.elements.new_category.value
+      if (newname !== null && newname !== '' && newname.length < 16 && !newname.includes(' ')) {
+        axios.post(path, { categoryname: PostEvent.target.elements.new_category.value })
+        location.reload()
+      } else {
+        window.alert('This name doesnt fit the requirements')
+      }
     },
     ChangeCategory (categoryName) {
-      var regExp = /[a-zA-Z]/g
-      const newname = prompt('Whats the new name for the category?')
-      if (newname !== null || newname !== '' || newname.value.match(regExp)) {
+      const newname = window.prompt('Whats the new name for the category?')
+      if (newname !== null && newname !== '' && newname.length < 16 && /^[a-zA-Z]+$/.test(newname) && !newname.includes(' ')) {
         const path = 'http://localhost:5000/categories'
         axios.put(path + '/' + categoryName, { categoryname: newname })
         location.reload()
+      } else {
+        window.alert('New name doesnt fit the requirements')
       }
     },
     DeleteCategory (categoryName) {

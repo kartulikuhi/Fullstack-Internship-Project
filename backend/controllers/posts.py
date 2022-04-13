@@ -30,7 +30,7 @@ def manage_posts(postid,categoryname=None):
         if not verify_connection(categoryID, postid):
 
             return make_response(jsonify(msg="No such post in this category"),404)
-            
+              
                     
     if request.method == 'GET':
         blogpost = get_post_from_id(postid)
@@ -49,6 +49,7 @@ def manage_posts(postid,categoryname=None):
             return make_response(jsonify(change_post(postdata, postid, request.get_json()["categories"])),200)
 
         return make_response(jsonify(msg="The post doesnt fit the requirements"),400)
+    
         
     
 
