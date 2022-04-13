@@ -1,10 +1,9 @@
-from flask import Blueprint, request
+import json
+from flask import Blueprint, request, jsonify, make_response
 from models.posts import *
 from models.connections import *
 from models.categories import *
 
-import json
-from app import db
 
 posts = Blueprint('posts',__name__)
 
@@ -14,49 +13,44 @@ def createpost():
         postdata = request.get_json()["postdata"]
 
         if postdata and len(postdata) <= 140:
-            return(add_post(postdata,request.get_json()["categories"]))
+            return make_response(add_post(postdata,request.get_json()["categories"]),200)
 
-        return({"msg":"The post doesnt fit the requirements"})
-    return json.dumps({"msg":"Request data wasn't in application/json"})
+        return make_response(jsonify(msg="The post doesnt fit the requirements"),400)
+    return make_response(jsonify(msg="Request data wasn't in application/json"),400)
 
 
 
 @posts.route('/posts/<postid>', methods=["GET","PUT","DELETE"])
 @posts.route('/categories/<categoryname>/<postid>', methods=["GET","PUT","DELETE"])
 def manage_posts(postid,categoryname=None):
-    if categoryname:
 
+    if categoryname:
         categoryID = get_category_from_name(categoryname).id
 
+        if not verify_connection(categoryID, postid):
 
-        if verify_connection(categoryID, postid):
-
-            if request.method == 'GET':
-                blogpost = get_post_from_id(postid)
-                categories = get_post_categories(postid)
-                return json.dumps({"post_data":blogpost.blogPost, "id":blogpost.id, "categories":categories})
-
-
-            if request.method == 'DELETE':
-                return json.dumps(delete_post(postid))
-
-
-            if request.method == 'PUT':
-                postdata = request.get_json()["postdata"]
-
-                if postdata and len(postdata) <= 140:
-                    return change_post(postdata, postid, request.get_json()["categories"])
-
-                return({"msg":"The post doesnt fit the requirements"})
+            return make_response(jsonify(msg="No such post in this category"),404)
+            
                     
-            
-            
+    if request.method == 'GET':
+        blogpost = get_post_from_id(postid)
+        categories = get_post_categories(postid)
+        return make_response(jsonify(blog_data=blogpost.blogPost, blogid=blogpost.id, categories=categories),200)
+
+
+    if request.method == 'DELETE':
+        return make_response(jsonify(delete_post(postid)))
+
+
+    if request.method == 'PUT':
+        postdata = request.get_json()["postdata"]
+
+        if postdata and len(postdata) <= 140:
+            return make_response(jsonify(change_post(postdata, postid, request.get_json()["categories"])),200)
+
+        return make_response(jsonify(msg="The post doesnt fit the requirements"),400)
         
-        return json.dumps({"msg":"No such post in this category"})
-
-
     
-
 
 
 @posts.route('/posts', methods=['GET'])
@@ -64,5 +58,5 @@ def get_all_posts():
     posts = []
     for post in query_all_posts():
         posts.append({"post_data":post.blogPost,"id":post.id, "categories":get_post_categories(post.id)})
-    return json.dumps({"posts":posts})
+    return make_response(jsonify(posts=posts),200)
 
