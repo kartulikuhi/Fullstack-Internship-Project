@@ -3,7 +3,7 @@
   <div>
     <div type="container">
       <div class="box" v-for="post in data.posts" :key="post.id">
-      <router-link  :to="'/'+ this.$route.params.categoryname + '/' + post.blogID">{{ post.blogpost }}  </router-link>
+        <router-link  :to="'/'+ this.$route.params.categoryname + '/' + post.blogID">{{ post.blogpost }}  </router-link>
       </div>
     </div>
   </div>

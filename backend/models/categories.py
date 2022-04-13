@@ -41,11 +41,13 @@ def add_category(categoryname):
     return make_response(jsonify(msg="This category already exists"),400)
 
 
-def change_category(categoryname, newname):
-    changedCategory = CategoriesClass.query.filter(CategoriesClass.categoryname == categoryname).first()
+def alter_category(categoryname, newname):
+    changedCategory = get_category_from_name(categoryname)
     if changedCategory:
-        changedCategory.categoryname=newname
-        db.session.commit()
-        return make_response(jsonify(msg="Category name changed"),200)
+        if not get_category_from_name(newname):
+            changedCategory.categoryname=newname
+            db.session.commit()
+            return make_response(jsonify(msg="Category name changed"),200)
+        return make_response(jsonify(msg="Category with this name already exists"),400)
     return make_response(jsonify(msg="This category doesn't exist"),400)
 
