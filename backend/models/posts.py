@@ -56,7 +56,6 @@ def change_post(newdata, postID, categories):
     if changed_post:
         changed_post.blogPost = newdata
         category_ids = []
-        print(categories)
         for category in categories:                       #create connections that don't exist yet
             if not get_category_from_name(category):
                 return {"msg":"category named %s doesnt exist" % category}
@@ -72,6 +71,6 @@ def change_post(newdata, postID, categories):
             db.session.delete(verify_connection(category, postID))
         db.session.commit()
 
-        return jsonify(msg="Post successfully changed")
+        return {"msg":"Post successfully changed"}
 
-    return jsonify(msg="this post does not seem to exist")
+    return {"msg":"this post does not seem to exist"}

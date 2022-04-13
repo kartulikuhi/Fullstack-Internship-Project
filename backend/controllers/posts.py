@@ -1,4 +1,4 @@
-import json
+
 from flask import Blueprint, request, jsonify, make_response
 from models.posts import *
 from models.connections import *
@@ -30,11 +30,14 @@ def manage_posts(postid,categoryname=None):
         if not verify_connection(categoryID, postid):
 
             return make_response(jsonify(msg="No such post in this category"),404)
-              
+
                     
     if request.method == 'GET':
         blogpost = get_post_from_id(postid)
-        categories = get_post_categories(postid)
+        categories = []
+        for i in get_post_categories(postid):
+            if get_category_from_id(i):
+                categories.append(get_category_from_id(i).categoryname)
         return make_response(jsonify(blog_data=blogpost.blogPost, blogid=blogpost.id, categories=categories),200)
 
 
@@ -44,7 +47,6 @@ def manage_posts(postid,categoryname=None):
 
     if request.method == 'PUT':
         postdata = request.get_json()["postdata"]
-
         if postdata and len(postdata) <= 140:
             return make_response(jsonify(change_post(postdata, postid, request.get_json()["categories"])),200)
 
@@ -58,6 +60,6 @@ def manage_posts(postid,categoryname=None):
 def get_all_posts():
     posts = []
     for post in query_all_posts():
-        posts.append({"post_data":post.blogPost,"id":post.id, "categories":get_post_categories(post.id)})
+        posts.append({"blogpost":post.blogPost,"id":post.id, "categories":get_post_categories(post.id)})
     return make_response(jsonify(posts=posts),200)
 

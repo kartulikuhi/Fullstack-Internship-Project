@@ -55,7 +55,7 @@ def list_posts(categoryname):
 
         for connection in ConnectionsList:
             blogpost = get_post_from_id(connection.blogID)
-            posts_list.append({"blogpost":blogpost.blogPost, "blogID":blogpost.id})
+            posts_list.append({"blogpost":blogpost.blogPost,"id":blogpost.id, "categories":get_post_categories(blogpost.id)})
 
         return make_response(jsonify(posts=posts_list),200)
     return make_response(jsonify(msg="This category does not exist"),400)

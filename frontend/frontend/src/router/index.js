@@ -2,6 +2,8 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import AllCategories from '../components/categories.vue'
 import SingleCategory from '../components/category.vue'
 import BlogPosts from '../components/posts.vue'
+import AddPost from '../components/addpost.vue'
+
 const routes = [
   {
     path: '/posts',
@@ -21,6 +23,11 @@ const routes = [
     path: '/',
     name: 'AllCategories',
     component: AllCategories
+  },
+  {
+    path: '/addpost',
+    name: 'AddPost',
+    component: AddPost
   },
   {
     path: '/:categoryname',
