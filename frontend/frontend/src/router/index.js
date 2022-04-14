@@ -3,6 +3,7 @@ import AllCategories from '../components/categories.vue'
 import SingleCategory from '../components/category.vue'
 import BlogPosts from '../components/posts.vue'
 import AddPost from '../components/addpost.vue'
+import AddCategory from '../components/addcategory.vue'
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
   {
     path: '/:categoryname/:blogID',
     component: BlogPosts
+  },
+  {
+    path: '/addcategory',
+    name: 'AddCategory',
+    component: AddCategory
   }
 
 ]

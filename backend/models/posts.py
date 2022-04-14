@@ -7,9 +7,9 @@ from models.categories import *
 class PostsClass(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
-    blogPost = db.Column(db.String(140), unique=True)
+    blogdata = db.Column(db.String(140), unique=True)
     def __repr__(self):
-        return '<PostsClass %r>' % self.blogPost
+        return '<PostsClass %r>' % self.blogdata
 
 
 def query_all_posts():
@@ -28,7 +28,7 @@ def get_post_categories(postID):
 
 
 def add_post(blogdata, categories=[]):
-    new_post = PostsClass(blogPost=blogdata)
+    new_post = PostsClass(blogdata=blogdata)
     db.session.add(new_post)
 
     if len(categories) > 0:
@@ -46,7 +46,7 @@ def delete_post(postID):
     db.session.commit()
     delete_connections_for_post(postID)
 
-    return jsonify(msg="Post successfully deleted")
+    return {"msg":"Post successfully deleted"}
 
 
 def change_post(newdata, postID, categories):
@@ -54,7 +54,7 @@ def change_post(newdata, postID, categories):
     changed_post = get_post_from_id(postID)
 
     if changed_post:
-        changed_post.blogPost = newdata
+        changed_post.blogdata = newdata
         category_ids = []
         for category in categories:                       #create connections that don't exist yet
             if not get_category_from_name(category):

@@ -10,12 +10,6 @@
           <button @click="DeleteCategory(category.categoryname)">Delete category</button>
         </div>
       </div>
-      <div class = "addingform">
-        <form @submit.prevent="PostCategory">
-          <input type="text" name="new_category">
-          <button type="submit"> Send </button>
-        </form>
-      </div>
     </div>
   </div>
 </template>
@@ -41,16 +35,7 @@ export default {
           console.error(err)
         })
     },
-    PostCategory (PostEvent) {
-      const path = 'http://localhost:5000/categories'
-      const newname = PostEvent.target.elements.new_category.value
-      if (newname !== null && newname !== '' && newname.length < 16 && !newname.includes(' ') && /^[a-zA-Z]+$/.test(newname)) {
-        axios.post(path, { categoryname: PostEvent.target.elements.new_category.value })
-        location.reload()
-      } else {
-        window.alert('This name doesnt fit the requirements')
-      }
-    },
+
     ChangeCategory (categoryName) {
       const newname = window.prompt('Whats the new name for the category?')
       if (newname !== null && newname !== '' && newname.length < 16 && /^[a-zA-Z]+$/.test(newname) && !newname.includes(' ')) {

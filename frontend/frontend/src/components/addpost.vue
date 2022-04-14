@@ -5,7 +5,7 @@
     <div class="postingcontainer">
       <div class = "addingform">
         <form @submit.prevent="PostBlogpost">
-          <input type="text" name="new_post">
+          <textarea type="text" name="new_post" style="height: 100px; width: 400px;"></textarea>
           <button type="submit"> Create Post </button>
           <div v-for="category in data.categories" :key="category.id">
             <input type="checkbox" :name=category.categoryname ref="Checked">
@@ -20,7 +20,7 @@
 <script>
 import axios from 'axios'
 export default {
-  name: 'AllCategories',
+  name: 'AddPost',
   data () {
     return {
       data: []
@@ -42,15 +42,13 @@ export default {
       var categories = []
       const path = 'http://localhost:5000/postsomething'
       const newpost = PostEvent.target.elements
-      console.log(newpost[2].name)
       for (var i = 2; i <= newpost.length - 1; i++) {
         if (newpost[i].checked) {
           categories.push(newpost[i].name)
         }
       }
-      console.log(categories)
       if (newpost !== null && newpost !== '' && newpost.length < 141) {
-        axios.post(path, { postdata: PostEvent.target.elements.new_post.value, categories: categories })
+        axios.post(path, { blogdata: PostEvent.target.elements.new_post.value, categories: categories })
         location.reload()
       } else {
         window.alert('This name doesnt fit the requirements')
