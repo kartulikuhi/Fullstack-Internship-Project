@@ -1,9 +1,10 @@
 # Fullstack-Internship-Project
 
-It is what it is 
+prerequisites:
+npm, flask, flask_cors, flask_sqlalchemy, pytest
 
-Blogs website or sth
-Categories -> Blogposts
+Backend service start:
+'flask run' in root folder
 
-post can belong to multiple categories
-yeah.
+Frontend service start:
+'vue serve' in frontend/frontend folder
