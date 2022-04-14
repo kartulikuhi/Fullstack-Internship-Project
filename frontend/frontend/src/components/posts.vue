@@ -4,7 +4,7 @@
     <button id="RevealButton" @click="RevealChanges()">Change Post</button>
     <div id="ChangeCategory" style="display:none;">
       <form @submit.prevent="PutChanges">
-        <input type="text" :value=data.blog_data name="TextInput">
+        <textarea :value=data.blog_data name="TextInput" style="height: 100px; width: 400px;"></textarea>
         <div v-for="category in all_categories.categories" :key="category.id">
           <input type="checkbox" :name=category.categoryname ref="Checked" v-if="data.categories.includes(category.categoryname)" checked>
           <input type="checkbox" :name=category.categoryname ref="Checked" v-else>
@@ -15,8 +15,8 @@
     </div>
     <button @click="DeletePost">Delete this post</button>
     <div class="container">
-      <div class="box" v-for="category in all_categories.categories" :key="category.id">
-        <router-link :to="'/'+ category.categoryname">{{ category.categoryname }}  </router-link>
+      <div class="box" v-for="category in data.categories" :key="category.id">
+        <router-link :to="'/'+ category">{{ category }}  </router-link>
       </div>
     </div>
   </div>
@@ -68,7 +68,7 @@ export default {
       }
 
       if (newblogpost !== null && newblogpost !== '' && newblogpost.length < 141) {
-        axios.put(path + this.$route.params.blogID, { postdata: newblogpost.TextInput.value, categories: categories })
+        axios.put(path + this.$route.params.blogID, { blogdata: newblogpost.TextInput.value, categories: categories })
         location.reload()
       } else {
         window.alert('This name doesnt fit the requirements')

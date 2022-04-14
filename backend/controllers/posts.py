@@ -10,7 +10,7 @@ posts = Blueprint('posts',__name__)
 @posts.route('/postsomething', methods=["POST"])
 def createpost():
     if request.is_json:
-        postdata = request.get_json()["postdata"]
+        postdata = request.get_json()["blogdata"]
 
         if postdata and len(postdata) <= 140:
             return make_response(add_post(postdata,request.get_json()["categories"]),200)
@@ -38,7 +38,7 @@ def manage_posts(postid,categoryname=None):
         for i in get_post_categories(postid):
             if get_category_from_id(i):
                 categories.append(get_category_from_id(i).categoryname)
-        return make_response(jsonify(blog_data=blogpost.blogPost, blogid=blogpost.id, categories=categories),200)
+        return make_response(jsonify(blog_data=blogpost.blogdata, blogid=blogpost.id, categories=categories),200)
 
 
     if request.method == 'DELETE':
@@ -46,7 +46,7 @@ def manage_posts(postid,categoryname=None):
 
 
     if request.method == 'PUT':
-        postdata = request.get_json()["postdata"]
+        postdata = request.get_json()["blogdata"]
         if postdata and len(postdata) <= 140:
             return make_response(jsonify(change_post(postdata, postid, request.get_json()["categories"])),200)
 
@@ -60,6 +60,6 @@ def manage_posts(postid,categoryname=None):
 def get_all_posts():
     posts = []
     for post in query_all_posts():
-        posts.append({"blogpost":post.blogPost,"id":post.id, "categories":get_post_categories(post.id)})
+        posts.append({"blogdata":post.blogdata,"id":post.id, "categories":get_post_categories(post.id)})
     return make_response(jsonify(posts=posts),200)
 
